@@ -26,15 +26,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-TOKEN = os.environ.get("TELEGRAM_TOKEN", "COLE_SEU_TOKEN_AQUI")
+TOKEN = "8623336055:AAEuIy2w_N68WvamQZSIGYBvZM3jVyG6b-0"
 bot = telebot.TeleBot(TOKEN)
 
 # ── Estado da conversa por usuário ──────────────────────────────────────────
-# Estrutura: {(chat_id,user_id): {...}}
+# Estrutura: { user_id: { "etapa": ..., "dados": {...}, "foto_bytes": None } }
 sessoes = {}
-
-def chave_sessao(msg):
-    return (msg.chat.id, msg.from_user.id)
 
 ETAPAS = [
     ("nome",            "👤 Qual é o seu nome completo?"),
@@ -56,14 +53,14 @@ TAMANHOS_FOTO = {
 }
 
 
-def sessao(chave):
-    if chave not in sessoes:
-        sessoes[chave] = {"etapa": 0, "dados": {}, "foto_bytes": None, "tamanho_foto": None}
-    return sessoes[chave]
+def sessao(uid):
+    if uid not in sessoes:
+        sessoes[uid] = {"etapa": 0, "dados": {}, "foto_bytes": None, "tamanho_foto": None}
+    return sessoes[uid]
 
 
-def resetar(chave):
-    sessoes[chave] = {"etapa": 0, "dados": {}, "foto_bytes": None, "tamanho_foto": None}
+def resetar(uid):
+    sessoes[uid] = {"etapa": 0, "dados": {}, "foto_bytes": None, "tamanho_foto": None}
 
 
 # ── /start ───────────────────────────────────────────────────────────────────
