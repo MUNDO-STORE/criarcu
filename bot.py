@@ -26,7 +26,21 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-TOKEN = os.environ.get("TELEGRAM_TOKEN", "COLE_SEU_TOKEN_AQUI")
+TOKEN = os.environ.get("TELEGRAM_TOKEN", "").strip()
+
+# ── Diagnóstico do token ─────────────────────────────────────────────────────
+if not TOKEN:
+    logger.critical("❌ ERRO: Variável de ambiente TELEGRAM_TOKEN não encontrada!")
+    logger.critical("➡️  Adicione TELEGRAM_TOKEN nas Variables do Railway.")
+    raise SystemExit(1)
+
+if ":" not in TOKEN:
+    logger.critical(f"❌ ERRO: Token inválido! Valor recebido: '{TOKEN}'")
+    logger.critical("➡️  O token deve ter formato: 123456789:AAFabcdef...")
+    logger.critical("➡️  Pegue o token correto no @BotFather no Telegram.")
+    raise SystemExit(1)
+
+logger.info(f"✅ Token encontrado! Iniciando bot...")
 bot = telebot.TeleBot(TOKEN)
 
 # ── Estado da conversa por usuário ──────────────────────────────────────────
